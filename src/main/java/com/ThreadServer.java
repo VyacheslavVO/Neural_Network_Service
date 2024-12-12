@@ -1,3 +1,5 @@
+package com;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -9,15 +11,21 @@ import java.util.concurrent.Executors;
  * @author VO
  *
  */
-public class ThreadServer {
+public class ThreadServer implements Runnable{
 
-    static ExecutorService executeIt = Executors.newFixedThreadPool(2);
+    private static final ExecutorService executeIt = Executors.newFixedThreadPool(2);
 
-    public static void main(String[] args) {
+    static int serverPort;
 
+    public ThreadServer (int port) {
+        serverPort = port;
+    }
+
+    @Override
+    public void run() {
         // стартуем сервер на порту 3345 и инициализируем переменную для обработки консольных команд с самого сервера
-        try (ServerSocket server = new ServerSocket(3345)) {
-            System.out.println("Server socket created, listening on server port: " + server.getLocalPort());
+        try (ServerSocket server = new ServerSocket( serverPort )) {
+            System.out.println( "Server socket created, listening on server port: " + server.getLocalPort() );
 
             // стартуем цикл при условии что серверный сокет не закрыт
             while (!server.isClosed()) {
@@ -32,8 +40,8 @@ public class ThreadServer {
                 // в Runnable(при необходимости можно создать Callable)
                 // монопоточную нить = сервер - MonoThreadClientHandler и тот
                 // продолжает общение от лица сервера
-                executeIt.execute(new ThreadClientHandler(client, executeIt));
-                System.out.println("Connection accepted");
+                executeIt.execute( new ThreadClientHandler( client, executeIt ) );
+                System.out.println( "Connection accepted" );
             }
 
             // закрытие пула нитей после завершения работы всех нитей
