@@ -23,10 +23,18 @@
         </dependency>
 
         <!-- JDBC-драйвер для MySQL -->
+        <!--
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
+        </dependency>
+        -->
+
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>9.1.0</version>
         </dependency>
 
         <!-- это небольшая библиотека Java, которая упрощает выполнение SQL-операторов в базе данных,
@@ -36,6 +44,15 @@
             <groupId>org.sql2o</groupId>
             <artifactId>sql2o</artifactId>
             <version>1.6.0</version>
+        </dependency>
+
+        <!-- JSON — это легкий, независимый от языка формат обмена данными. См. http://www.JSON.org/
+        Файлы в этом пакете реализуют кодировщики/декодеры JSON в Java.
+        -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20240303</version>
         </dependency>
     </dependencies>
 

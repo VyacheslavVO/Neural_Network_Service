@@ -16,6 +16,7 @@ public class Server implements Runnable{
     private final ServerSocketChannel ssc;
     private final Selector selector;
     private final ByteBuffer buf = ByteBuffer.allocate(256);
+    CommandHandler commandHandler;
 
     public Server(int port) throws IOException {
         this.port = port;
@@ -25,6 +26,7 @@ public class Server implements Runnable{
         this.selector = Selector.open();
 
         this.ssc.register(selector, SelectionKey.OP_ACCEPT);
+        this.commandHandler = new CommandHandler();
     }
 
     @Override
@@ -87,7 +89,8 @@ public class Server implements Runnable{
 
         System.out.println(msg);
         // TODO: вставить обработчики полученных команд
-        broadcast(msg);
+        this.commandHandler.execution( msg );
+        //broadcast(msg);
     }
 
     /*
