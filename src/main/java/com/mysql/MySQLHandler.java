@@ -9,21 +9,22 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class MySQLHandler {
 
-    private  java.sql.Connection connection = null;
+    private java.sql.Connection connection = null;
     protected String driver;                        // драйвер JDBC
     protected String url = null;                    // строка подключения
 
-    private  final  String DATABASE_CREATE = "CREATE DATABASE IF NOT EXISTS %s " +
+    private final String DATABASE_CREATE = "CREATE DATABASE IF NOT EXISTS %s " +
             "CHARACTER SET utf8 "               +
             "COLLATE utf8_general_ci "          ;
-    private  final  String DROP_DATABASE   = "DROP DATABASE IF EXISTS %s";
-    private  final  String TABLE_DROP   = "DROP TABLE IF EXISTS %s";
+    private final String DROP_DATABASE   = "DROP DATABASE IF EXISTS %s";
+    private final String TABLE_DROP   = "DROP TABLE IF EXISTS %s";
+
+    private final String SELECT_SERVER_PARAM = "SELECT * FROM neural_network.tcp_server WHERE id = 1";
+
 
     public MySQLHandler(String driver) {
         this.driver = driver;
@@ -110,7 +111,7 @@ public class MySQLHandler {
     }
 
     /**
-     * Функция выполнения SQL-запроса без получения данных
+     * Функция выполнения SQL-запроса с получением данных
      * @param sql текст запроса
      * @return результат выполнения запроса
      */
@@ -153,7 +154,7 @@ public class MySQLHandler {
     }
 
     /**
-     * Функция данных из файла SQL
+     * Функция загрузки данных из файла SQL
      * @param inputStream данные из внешнего файла
      * @return результат выполнения запроса
      */
@@ -185,5 +186,16 @@ public class MySQLHandler {
             result = true;
         }
         return result;
+    }
+
+    /*
+     * Фенкция получения текущего порта из настроек сервера
+     * @return номер порта из базы
+     */
+    public JSONObject getServerData() {
+        JSONArray server_data = executeQuery( "SELECT * FROM neural_network.tcp_server WHERE id = 1" );
+        JSONObject data = new JSONObject(server_data.getJSONObject( 0 ).toString());
+        //return data.getInt( "port" );
+        return data;
     }
 }
